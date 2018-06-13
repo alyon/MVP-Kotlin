@@ -4,11 +4,12 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea
 .DS_Store
 /build
 /captures
 .externalNativeBuild
-
+.idea
 .gradle
 /build/
 
@@ -23,4 +24,4 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
->>>>>>> 95ac355656092224dda5b1fff619c1f146146d61
+
