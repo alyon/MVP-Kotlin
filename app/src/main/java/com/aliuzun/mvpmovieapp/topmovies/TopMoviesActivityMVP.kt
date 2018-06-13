@@ -13,7 +13,4 @@ interface TopMoviesActivityMVP {
         fun rxUnsubscribe()
         fun setView(view: View)
     }
-    interface Model{
-        fun result():Observable<com.aliuzun.mvpmovieapp.topmovies.ViewModel>
-    }
 }
