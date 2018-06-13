@@ -1,0 +1,30 @@
+PROJECT BOILERPLATE
+
+"root" Folder
+    -Application:In here register DaggerApplicationComponent
+    -ApplicationComponent: Dagger Singleton, Component Where all other components, activities are injected
+    -ApplicationModule: Dagger Module to inject application
+
+"http" folder
+    -"apimodel" folder : Where api related (from json generated) model data classes
+    -"ApiModuleFor${DOMAIN}" provides module for Retrofit (with OkHttpClient) client for each domain
+    -"${DOMAIN}ApiService" where end points for each domain are registered
+
+"topmovies" / feature folders
+    -Contains MVP interface, MVP classes, module, repository
+    -${FEATURE}Activity: Implements ${FEATURE}ActivityMVP.View interface, uses presenter to get required data
+    -${FEATURE}ActivityMVP : Contains Model View Presenter interfaces
+    -${FEATURE}ViewModel: Related Api model modified according to view's needs
+    -Repository: Data observables interface
+    -${FEATURE}Repository: Implements repository interface.Provides RxJava functions to be used for
+     pulling data related to feature domain. Takes ${DOMAIN}ApiService as constructor parameter.
+    -${FEATURE}Module: Dagger Module that provides Model, View and Presenter for feature domain
+    -${FEATURE}Model: Acts as data provider for feature domain. Gets data through ${FEATURE}Repository
+     functions and takes "Repository" as constructor parameter
+    -${FEATURE}Presenter: Acts as a bridge between ${FEATURE}Model and ${FEATURE}ViewModel.Gets data from
+     model and passes that to related View interface's function. takes "${FEATURE}Model" as constructor parameter
+
+-Activity
+    -add tag : val TAG = MainActivity::class.java.name
+    -add MVP interface file and define functions for each section
+    -add injections: Inject App component (App).component.inject(this)
