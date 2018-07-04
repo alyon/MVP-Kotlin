@@ -1,7 +1,6 @@
 package com.aliuzun.mvpmovieapp.root
 
 import android.app.Application
-import com.aliuzun.mvpmovieapp.http.ApiModuleForInfo
 import com.aliuzun.mvpmovieapp.http.ApiModuleForName
 import com.aliuzun.mvpmovieapp.topmovies.TopMoviesModule
 
@@ -22,7 +21,6 @@ class App : Application() {
                 .applicationModule( ApplicationModule(this))
                 .apiModuleForName( ApiModuleForName())
                 .topMoviesModule( TopMoviesModule())
-                .apiModuleForInfo( ApiModuleForInfo())
                 .build()
     }
 }

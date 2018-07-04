@@ -1,53 +1,50 @@
 package com.aliuzun.mvpmovieapp.topmovies
 
+import android.arch.lifecycle.ViewModel
+import com.aliuzun.mvpmovieapp.http.MovieApiService
+import com.aliuzun.mvpmovieapp.http.apimodel.TopRated
 import io.reactivex.internal.disposables.DisposableHelper.isDisposed
 import io.reactivex.observers.DisposableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.disposables.Disposable
+import io.reactivex.internal.util.NotificationLite.subscription
 
 
-class TopMoviesPresenter(private val model: TopMoviesActivityMVP.Model) : TopMoviesActivityMVP.Presenter {
+class TopMoviesPresenter(private val movieApiService: MovieApiService) : TopMoviesActivityMVP.Presenter {
 
     private var view: TopMoviesActivityMVP.View? = null
-    private var subscription: Disposable? = null
+    private var subscription: CompositeDisposable = CompositeDisposable()
 
     override fun loadData() {
 
-        subscription = model
-                .result()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(object : DisposableObserver<ViewModel>() {
-                    override fun onComplete() {
-                        view!!.showSnackBar("Data onCompleted")
+        if (view != null) view!!.setLoading(true)
+
+        subscription.add(movieApiService.topRatedMovies(Integer(1)).
+                subscribeOn(Schedulers.io()).
+                observeOn(AndroidSchedulers.mainThread()).
+                doOnTerminate({
+                  if (view != null) {
+                      view!!.setLoading(false)
+                  }})
+                .subscribe({ topRated ->
+                    if (view != null) {
+                        view!!.updateData(topRated.results)
                     }
-
-
-                    override fun onError(e: Throwable) {
-                        e.printStackTrace()
-                        if (view != null) {
-                            view!!.showSnackBar("Error getting movies")
-                        }
-                    }
-
-                    override fun onNext(viewModel: ViewModel) {
-                        if (view != null) {
-                            view!!.updateData(viewModel)
-                        }
+                }, { error ->
+                    if (view != null) {
+                        view!!.showSnackBar(error.localizedMessage)
                     }
                 })
+        )
     }
 
-    override fun rxUnsubscribe() {
-        if (subscription != null) {
-            if (!subscription!!.isDisposed) {
-                subscription!!.dispose()
-            }
-        }
+    override fun detachView() {
+        subscription.clear()
     }
 
-    override fun setView(view: TopMoviesActivityMVP.View) {
+    override fun attachView(view: TopMoviesActivityMVP.View) {
         this.view = view
     }
 

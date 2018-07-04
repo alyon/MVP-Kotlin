@@ -1,11 +1,10 @@
-package com.aliuzun.mvpmovieapp.topmovies
+package com.aliuzun.mvpmovieapp.helper
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.view.View
 
 import com.aliuzun.mvpmovieapp.R
 
